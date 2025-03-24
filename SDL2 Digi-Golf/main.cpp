@@ -5,8 +5,15 @@
 
 int main(int argc, char* argv[]) {
 	SDL_Init(SDL_INIT_VIDEO);
+	IMG_Init(IMG_INIT_PNG);
 	SDL_Window* window = SDL_CreateWindow("Digi-Golf", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+	SDL_Texture* ballTexture = loadTexture(renderer, "golfball.png");
+	if (!ballTexture) {
+		SDL_Log("Failed to load texture: %s", IMG_GetError());
+		return 1;
+	}
 
 	Ball ball{ SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0, 0, false };
 
@@ -65,11 +72,13 @@ int main(int argc, char* argv[]) {
 			ball.cy *= 0.99f;
 		}
 
-		renderScene(renderer, ball);
+		renderScene(renderer, ball, ballTexture);
 	}
 
+	SDL_DestroyTexture(ballTexture);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+	IMG_Quit();
 	SDL_Quit();
 
 	return 0;

@@ -2,19 +2,24 @@
 #include "constant.h"
 #include <cmath>
 
-void renderScene(SDL_Renderer* renderer, const Ball& ball) {
+
+SDL_Texture* loadTexture(SDL_Renderer* renderer, const char* path) {
+	SDL_Texture* texture = IMG_LoadTexture(renderer, path);
+	if (!texture) {
+		SDL_Log("Failed to load texture: %s", IMG_GetError());
+	}
+	return texture;
+}
+
+void renderScene(SDL_Renderer* renderer, const Ball& ball, SDL_Texture* ballTexture) {
 
 	SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255);
 	SDL_RenderClear(renderer);
 	
 	// Draw circle representing ball (temporary later will be image as asset)
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	for (int w = -BALL_RADIUS; w < BALL_RADIUS; w++) {
-		for (int h = -BALL_RADIUS; h < BALL_RADIUS; h++) {
-			if (w * w + h * h <= BALL_RADIUS * BALL_RADIUS) {
-				SDL_RenderDrawPoint(renderer, static_cast<int>(ball.x) + w, static_cast<int>(ball.y) + h);
-			}
-		}
+	if (ballTexture) {
+		SDL_Rect destRect = { static_cast<int>(ball.x - BALL_RADIUS), static_cast<int>(ball.y - BALL_RADIUS), BALL_RADIUS * 2, BALL_RADIUS * 2 };
+		SDL_RenderCopy(renderer, ballTexture, NULL, &destRect);
 	}
 
 	// Direction line indicator (might change to asset)
