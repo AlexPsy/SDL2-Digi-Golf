@@ -148,12 +148,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ball.cpp" />
+    <ClCompile Include="direction_indicator.cpp" />
+    <ClCompile Include="game_logic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="rendering.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
     <ClInclude Include="constant.h" />
+    <ClInclude Include="direction_indicator.h" />
+    <ClInclude Include="game_logic.h" />
     <ClInclude Include="rendering.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

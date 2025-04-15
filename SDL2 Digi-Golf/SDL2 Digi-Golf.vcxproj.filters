@@ -24,6 +24,12 @@
     <ClCompile Include="rendering.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="direction_indicator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_logic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constant.h">
@@ -33,6 +39,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="rendering.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="direction_indicator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_logic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
