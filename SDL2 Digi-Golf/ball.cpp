@@ -1,29 +1,48 @@
 #include "ball.h"
 #include "constant.h"
+#include "tilemap.h"
 
-Ball::Ball() : x(SCREEN_WIDTH / 2.0f), y(SCREEN_HEIGHT / 2.0f), cx(0), cy(0), isDragging(false) {}
+Ball::Ball(float startX, float startY) : x(startX), y(startY), cx(0), cy(0), isDragging(false) {}
 
-void Ball::Update() {
+void Ball::Update(const Tilemap& tilemap) {
 	if (!isDragging) {
+		float prevX = x;
+		float prevY = y;
+
 		x += cx;
 		y += cy;
 
-		// Collision check on boundaries on update
-		if (x < BALL_RADIUS || x > SCREEN_WIDTH - BALL_RADIUS) {
-			x = x < BALL_RADIUS ? BALL_RADIUS : SCREEN_WIDTH - BALL_RADIUS;
+		bool leftCollision = tilemap.IsCollisionTile(x - BALL_RADIUS, y);
+		bool rightCollision = tilemap.IsCollisionTile(x + BALL_RADIUS, y);
+		bool topCollision = tilemap.IsCollisionTile(x, y - BALL_RADIUS);
+		bool bottomCollision = tilemap.IsCollisionTile(x, y + BALL_RADIUS);
+
+		if (leftCollision || rightCollision) {
 			cx *= -BOUNCE_DAMPING;
+			x = prevX;
 		}
-		if (y < BALL_RADIUS || y > SCREEN_HEIGHT - BALL_RADIUS) {
-			y = y < BALL_RADIUS ? BALL_RADIUS : SCREEN_HEIGHT - BALL_RADIUS;
+
+		if (topCollision || bottomCollision) {
 			cy *= -BOUNCE_DAMPING;
+			y = prevY;
 		}
+
+		// Collision check on boundaries on update
+		//if (x < BALL_RADIUS || x > SCREEN_WIDTH - BALL_RADIUS) {
+		//	x = x < BALL_RADIUS ? BALL_RADIUS : SCREEN_WIDTH - BALL_RADIUS;
+		//	cx *= -BOUNCE_DAMPING;
+		//}
+		//if (y < BALL_RADIUS || y > SCREEN_HEIGHT - BALL_RADIUS) {
+		//	y = y < BALL_RADIUS ? BALL_RADIUS : SCREEN_HEIGHT - BALL_RADIUS;
+		//	cy *= -BOUNCE_DAMPING;
+		//}
 
 		cx *= 0.99f;
 		cy *= 0.99f;
 	}
 }
 
-// Mouse dragging distance and release calcuation inside controls
+// Mouse dragging distance and release calculation inside controls
 void Ball ::HandleDragEvent(const SDL_Event& event) {
 	switch (event.type) {
 		case SDL_MOUSEBUTTONDOWN:
@@ -53,7 +72,12 @@ void Ball ::HandleDragEvent(const SDL_Event& event) {
 
 void Ball::Render(SDL_Renderer* renderer, SDL_Texture* texture) const {
 	if (texture) {
-		SDL_Rect dest{ static_cast<int>(x - BALL_RADIUS), static_cast<int>(y - BALL_RADIUS), BALL_RADIUS * 2, BALL_RADIUS * 2 };
+		SDL_Rect dest{ 
+			static_cast<int>(x - BALL_RADIUS), 
+			static_cast<int>(y - BALL_RADIUS), 
+			BALL_RADIUS * 2, 
+			BALL_RADIUS * 2 
+		};
 		SDL_RenderCopy(renderer, texture, nullptr, &dest);
 	}
 }
