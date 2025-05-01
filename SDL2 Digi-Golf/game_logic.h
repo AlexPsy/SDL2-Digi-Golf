@@ -3,6 +3,7 @@
 #include "ball.h"
 #include "direction_indicator.h"
 #include "rendering.h"
+#include "tilemap.h"
 
 class Game {
 public:
@@ -22,4 +23,6 @@ private:
 	DirectionIndicator directionIndicator;
 	SDL_Texture* ballTexture;
 	bool running;
+
+	Tilemap* tilemap;
 };

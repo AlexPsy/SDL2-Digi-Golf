@@ -5,6 +5,7 @@ Game::Game() : window(nullptr), renderer(nullptr), ballTexture(nullptr), running
 
 Game::~Game() {
 	SDL_DestroyTexture(ballTexture);
+	delete tilemap;
 	delete renderer;
 	SDL_DestroyWindow(window);
 }
@@ -19,15 +20,23 @@ bool Game::Init() {
 	if (!window) return false;
 
 	renderer = new Renderer(window);
-	ballTexture = renderer->LoadTexture("golfball.png");
+	ballTexture = renderer->LoadTexture("assets/golfball.png");
 
-	return ballTexture != nullptr;
+	ball = Ball(400.0F, 300.0f);
+
+	tilemap = new Tilemap(renderer, TILE_MAP_PATH);
+	if (!tilemap->LoadFromFile()) {
+		SDL_Log("Failed to load tilemap");
+		return false;
+	}
+
+	return true;
 }
 
 void Game::Run() {
 	while (running) {
 		ProcessEvents();
-		ball.Update();
+		ball.Update(*tilemap);
 		Render();
 	}
 }
@@ -45,8 +54,10 @@ void Game::ProcessEvents() {
 void Game::Render() {
 	renderer->Clear();
 
-	SDL_SetRenderDrawColor(renderer->Get(), 0, 128, 0, 255);
-	SDL_RenderClear(renderer->Get());
+	tilemap->Render();
+
+//	SDL_SetRenderDrawColor(renderer->Get(), 0, 128, 0, 255);
+//	SDL_RenderClear(renderer->Get());
 
 	ball.Render(renderer->Get(), ballTexture);
 	directionIndicator.Render(renderer->Get(), ball);
