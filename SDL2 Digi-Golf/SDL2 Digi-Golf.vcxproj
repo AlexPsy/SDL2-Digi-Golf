@@ -152,6 +152,7 @@
     <ClCompile Include="game_logic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="rendering.cpp" />
+    <ClCompile Include="tilemap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="direction_indicator.h" />
     <ClInclude Include="game_logic.h" />
     <ClInclude Include="rendering.h" />
+    <ClInclude Include="tilemap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
